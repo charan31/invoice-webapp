@@ -1,0 +1,234 @@
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Invoice</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <button mat-stroked-button color="primary">View All</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div>
+        <div class="header">
+        </div>
+        <div class="content">
+          <form [formGroup]="form" (ngSubmit)="submit(form)">
+            <fieldset class="form-group">
+              <legend>Customer Information</legend>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <mat-form-field class="example-full-width">
+
+                      <mat-select placeholder="Slect Customer" formControlName="customer_id">
+                        <mat-option>None</mat-option>
+                        <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer.id">{{customer.name}}</mat-option>
+                      </mat-select>
+
+                      <!-- <input matInput placeholder="Customer" aria-label="Customer" [matAutocomplete]="auto">
+                      <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer.name">
+                          <span>{{customer.name}}</span>
+                        </mat-option>
+                      </mat-autocomplete> -->
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="form-group">
+              <legend>Invoice Information</legend>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="Invoice No" formControlName="invoice_no">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <mat-form-field class="example-full-width">
+                      <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="invoice_date">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="DC No" formControlName="dc_no">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="Reverse Charge (Y/N)" formControlName="reverse_charge">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="State" formControlName="state">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="Code" formControlName="invoice_code">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-group">
+              <legend>Additional Information</legend>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="Transport Mode" formControlName="transport_mode">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="Vehicle Number" formControlName="vehicle_no">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="Date of Supply" formControlName="date_of_supply">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="Place of Supply" formControlName="place_of_supply">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="PO No" formControlName="po_no">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="PO Date" formControlName="po_date">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-group">
+              <legend>Products Information</legend>
+              <div style="margin-bottom: 10px">
+                <button type="button" mat-raised-button (click)="openAddProductsDialog()">Add Product</button>
+              </div>
+              <div class="clearfix"></div>
+
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                <ng-container matColumnDef="product_description">
+                  <th mat-header-cell *matHeaderCellDef> Product Description </th>
+                  <td mat-cell *matCellDef="let invoice_product"> {{invoice_product.product_description}} </td>
+                  <td mat-footer-cell *matFooterCellDef> Total </td>
+                </ng-container>
+
+                <ng-container matColumnDef="hsn_code">
+                  <th mat-header-cell *matHeaderCellDef> HSN Code </th>
+                  <td mat-cell *matCellDef="let invoice_product"> {{invoice_product.hsn_code}} </td>
+                  <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+
+                <ng-container matColumnDef="quantity">
+                  <th mat-header-cell *matHeaderCellDef> QTY / MT </th>
+                  <td mat-cell *matCellDef="let invoice_product"> {{invoice_product.quantity}} </td>
+                  <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+
+                <ng-container matColumnDef="rate">
+                  <th mat-header-cell *matHeaderCellDef> Rate </th>
+                  <td mat-cell *matCellDef="let invoice_product">{{invoice_product.rate }} </td>
+                  <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+
+                <ng-container matColumnDef="amount">
+                  <th mat-header-cell *matHeaderCellDef> Amount </th>
+                  <td mat-cell *matCellDef="let invoice_product"> {{ invoice_product.quantity * invoice_product.rate }} </td>
+                  <td mat-footer-cell *matFooterCellDef> {{ getTotalCost() | currency }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="taxable_value">
+                  <th mat-header-cell *matHeaderCellDef> Taxable Value </th>
+                  <td mat-cell *matCellDef="let invoice_product"> {{ invoice_product.quantity * invoice_product.rate }} </td>
+                  <td mat-footer-cell *matFooterCellDef> {{ getTotalTaxableValue() | currency }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="cgst_amount">
+                  <th mat-header-cell *matHeaderCellDef> CGST (2.5%) </th>
+                  <td mat-cell *matCellDef="let invoice_product"> {{ invoice_product.cgst_amount }} </td>
+                  <td mat-footer-cell *matFooterCellDef>{{ getTotalCGSTAmount() | currency }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="sgst_amount">
+                  <th mat-header-cell *matHeaderCellDef> SGST (2.5%) </th>
+                  <td mat-cell *matCellDef="let invoice_product"> {{ invoice_product.sgst_amount }} </td>
+                  <td mat-footer-cell *matFooterCellDef> {{ getTotalSGSTAmount() | currency}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="total">
+                  <th mat-header-cell *matHeaderCellDef> Total </th>
+                  <td mat-cell *matCellDef="let invoice_product"> {{ invoice_product.total }} </td>
+                  <td mat-footer-cell *matFooterCellDef> {{getTotal() | currency }}</td>
+                </ng-container>
+
+
+
+                <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns" class="example-first-header-row">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-footer-row *matFooterRowDef="displayedColumns" class="example-first-footer-row"></tr>
+              </table>
+
+
+            </fieldset>
+            <div class="clearfix"></div>
+            <div style="padding-bottom: 20px">
+              <button mat-raised-button color="primary" type="submit">Save</button>
+
+            </div>
+            <div class="clearfix"></div>
+          </form>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
