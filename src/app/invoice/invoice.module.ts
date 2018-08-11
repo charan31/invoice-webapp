@@ -12,7 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import { InvoiceService } from '../services/invoice.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
-import { InvoiceviewComponent } from './invoiceview/invoiceview.component';
+import { InvoiceDetailsComponent } from './invoiceDetails/invoicedetails.component';
 
 @NgModule({
   imports: [CommonModule, routing, MatNativeDateModule, MatDatepickerModule,
@@ -20,7 +20,7 @@ import { InvoiceviewComponent } from './invoiceview/invoiceview.component';
     MatInputModule, MatDialogModule, MatTableModule,
     MatAutocompleteModule, FormsModule,
     ReactiveFormsModule, ToastrModule.forRoot({ positionClass: 'toast-bottom-center' })],
-  declarations: [InvoiceComponent, ProductsDialogComponent, InvoiceviewComponent],
+  declarations: [InvoiceComponent, ProductsDialogComponent, InvoiceDetailsComponent],
   entryComponents: [ProductsDialogComponent],
 
   providers: [InvoiceService]

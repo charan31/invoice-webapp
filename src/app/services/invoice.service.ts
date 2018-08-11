@@ -11,11 +11,13 @@ export class InvoiceService {
   private _postCustomer;
   private _getCustomer;
   private _postInvoice;
+  private _getInvoiceById;
   constructor(
     private _httpClient: HttpClient) {
     this._postCustomer = `${this.rootPath}` + '/customer/';
     this._getCustomer = `${this.rootPath}` + '/customer/';
     this._postInvoice = `${this.rootPath}` + '/invoice/';
+    this._getInvoiceById = `${this.rootPath}` + '/getinvoicebyid/';
   }
   public createCustomer(payload: any) {
     return this._httpClient.post(this._postCustomer, payload)
@@ -34,6 +36,13 @@ export class InvoiceService {
 
   public createInvoice(payload: any) {
     return this._httpClient.post(this._postInvoice, payload)
+      .pipe(map(data => {
+        return data;
+      }));
+  }
+
+  public getInvoiceDetailsById(id: any) {
+    return this._httpClient.get(this._getInvoiceById)
       .pipe(map(data => {
         return data;
       }));
